@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  web:
+    build: ./web
+    container_name: 2022BCD0008_web
+    ports:
+      - "9090:5000"
+    depends_on:
+      - db
+    environment:
+      - MONGO_HOST=db
+    networks:
+      - app_network
+
+  worker:
+    build: ./worker
+    container_name: 2022BCD0008_worker
+    depends_on:
+      - db
+    networks:
+      - app_network
+
+  db:
+    image: mongo:latest
+    container_name: 2022BCD0008_db
+    restart: always
+    ports:
+      - "27018:27018"
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - app_network
+
+volumes:
+  mongo_data:
+
+networks:
+  app_network:
